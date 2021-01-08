@@ -31,6 +31,7 @@ import google.auth.transport.requests
 import google.oauth2.credentials
 
 import pvporcupine
+import threading
 import RPi.GPIO as GPIO
 from porcupine import PorcupineDemo
 
