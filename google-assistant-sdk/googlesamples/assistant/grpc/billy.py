@@ -30,6 +30,7 @@ import google.auth.transport.grpc
 import google.auth.transport.requests
 import google.oauth2.credentials
 
+import pvporcupine
 import RPi.GPIO as GPIO
 from porcupine import PorcupineDemo
 
@@ -460,7 +461,14 @@ def main(api_endpoint, credentials, project_id,
         # When the once flag is set, don't wait for a trigger. Otherwise, wait.
         wait_for_user_trigger = not once
 
-        porcupine = PorcupineDemo(keyword_paths='ok google')
+        PorcupineDemo(
+            library_path=apvporcupine.LIBRARY_PATH,
+            model_path=apvporcupine.MODEL_PATH,
+            keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['ok google']]
+            sensitivities=[0.5],
+            output_path=None,
+            input_device_index=None).run()
+
 
         while True:
             if wait_for_user_trigger:
