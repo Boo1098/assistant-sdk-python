@@ -31,6 +31,7 @@ import google.auth.transport.requests
 import google.oauth2.credentials
 
 import RPi.GPIO as GPIO
+import PorcupineDemo
 
 from google.assistant.embedded.v1alpha2 import (
     embedded_assistant_pb2,
@@ -458,9 +459,14 @@ def main(api_endpoint, credentials, project_id,
         # and playing back assistant response using the speaker.
         # When the once flag is set, don't wait for a trigger. Otherwise, wait.
         wait_for_user_trigger = not once
+
+        porcupine = PorcupineDemo(keyword_paths='ok google')
+
         while True:
             if wait_for_user_trigger:
-                click.pause(info='Press Enter to send a new request...')
+                while not porcupine.detected:
+                    time.sleep(0.5)
+                #click.pause(info='Press Enter to send a new request...')
             continue_conversation = assistant.assist()
             # wait for user trigger if there is no follow-up turn in
             # the conversation.

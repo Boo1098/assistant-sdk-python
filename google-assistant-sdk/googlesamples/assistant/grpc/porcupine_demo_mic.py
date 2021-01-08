@@ -59,6 +59,8 @@ class PorcupineDemo(Thread):
         self._sensitivities = sensitivities
         self._input_device_index = input_device_index
 
+        self.detected = False
+
         self._output_path = output_path
         if self._output_path is not None:
             self._recorded_frames = []
@@ -108,6 +110,11 @@ class PorcupineDemo(Thread):
                 result = porcupine.process(pcm)
                 if result >= 0:
                     print('[%s] Detected %s' % (str(datetime.now()), keywords[result]))
+                    # Insert call to gassist
+                    self.detected=True
+                    time.sleep(1)
+                else:
+                    self.detected=False
 
         except KeyboardInterrupt:
             print('Stopping ...')
