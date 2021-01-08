@@ -461,14 +461,16 @@ def main(api_endpoint, credentials, project_id,
         # When the once flag is set, don't wait for a trigger. Otherwise, wait.
         wait_for_user_trigger = not once
 
-        PorcupineDemo(
+        porcupine = PorcupineDemo(
             library_path=pvporcupine.LIBRARY_PATH,
             model_path=pvporcupine.MODEL_PATH,
             keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['porcupine']],
             sensitivities=[0.5],
             output_path=None,
-            input_device_index=None).run()
+            input_device_index=None)
 
+        porcupine_thread = threading.Thread(target=porcupine.run)
+        porcupine_thread.start()
 
         while True:
             if wait_for_user_trigger:
