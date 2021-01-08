@@ -19,6 +19,7 @@ import numpy as np
 import pvporcupine
 import pyaudio
 import soundfile
+import time
 
 
 class PorcupineDemo(Thread):
