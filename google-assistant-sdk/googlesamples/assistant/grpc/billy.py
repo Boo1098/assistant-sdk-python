@@ -423,16 +423,14 @@ def main(api_endpoint, credentials, project_id,
 
     device_handler = device_helpers.DeviceRequestHandler(device_id)
     GPIO.setmode(GPIO.BCM)
-    GPIO.setup(12,GPIO.OUT,initial=GPIO.HIGH)
+    GPIO.setup(12,GPIO.OUT,initial=GPIO.LOW)
 
     @device_handler.command('action.devices.commands.OnOff')
     def onoff(on):
         if on:
             logging.info('Turning device on')
-            GPIO.output(12,1)
         else:
             logging.info('Turning device off')
-            GPIO.output(12,0)
 
     @device_handler.command('com.example.commands.BlinkLight')
     def blink(speed, number):
@@ -487,10 +485,45 @@ def main(api_endpoint, credentials, project_id,
             if once and (not continue_conversation):
                 break
 
-clase Billy:
-    
-    
+class Billy:
+    MOUTH_PIN = 22
+    HEAD_PIN = 23
+    TAIL_PIN = 27
+    SPEAKER_SD = 24
+    EYE_PIN = 12
 
+    def __init__(self):
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(MOUTH_PIN, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(HEAD_PIN, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(TAIL_PIN, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(EYE_PIN, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(SPEAKER_SD, GPIO.OUT, initial=GPIO.LOW)
+
+    def open_mouth(self):
+        GPIO.output(MOUTH_PIN,GPIO.HIGH)
+
+    def close_mouth(self):
+        GPIO.output(MOUTH_PIN,GPIO.LOW)
+
+    def open_head(self):
+        GPIO.output(HEAD_PIN,GPIO.HIGH)
+
+    def close_head(self):
+        GPIO.output(HEAD_PIN,GPIO.LOW)
+
+    def open_tail(self):
+        GPIO.output(TAIL_PIN,GPIO.HIGH)
+
+    def close_tail(self):
+        GPIO.output(TAIL_PIN,GPIO.LOW)        
+
+    def eye_on(self):
+        GPIO.output(EYE_PIN,GPIO.HIGH)
+
+    def eye_off(self):
+        GPIO.output(EYE_PIN,GPIO.LOW)
 
 if __name__ == '__main__':
     main()
