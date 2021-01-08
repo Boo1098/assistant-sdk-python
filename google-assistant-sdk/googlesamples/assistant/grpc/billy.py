@@ -466,7 +466,7 @@ def main(api_endpoint, credentials, project_id,
             library_path=pvporcupine.LIBRARY_PATH,
             model_path=pvporcupine.MODEL_PATH,
             keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['porcupine']],
-            sensitivities=[0.5],
+            sensitivities=[0.75],
             output_path=None,
             input_device_index=None)
 
@@ -476,7 +476,7 @@ def main(api_endpoint, credentials, project_id,
         while True:
             if wait_for_user_trigger:
                 while not porcupine.detected:
-                    time.sleep(0.5)
+                    time.sleep(0.1)
                 #click.pause(info='Press Enter to send a new request...')
             continue_conversation = assistant.assist()
             # wait for user trigger if there is no follow-up turn in
@@ -486,6 +486,10 @@ def main(api_endpoint, credentials, project_id,
             # If we only want one conversation, break.
             if once and (not continue_conversation):
                 break
+
+clase Billy:
+    
+    
 
 
 if __name__ == '__main__':
