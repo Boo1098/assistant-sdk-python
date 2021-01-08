@@ -484,15 +484,15 @@ def main(api_endpoint, credentials, project_id,
             # If we only want one conversation, break.
             if once and (not continue_conversation):
                 break
+MOUTH_PIN = 22
+HEAD_PIN = 23
+TAIL_PIN = 27
+SPEAKER_SD = 24
+EYE_PIN = 12
+
 
 class Billy:
-    MOUTH_PIN = 22
-    HEAD_PIN = 23
-    TAIL_PIN = 27
-    SPEAKER_SD = 24
-    EYE_PIN = 12
-
-    def __init__(self):
+        def __init__(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(MOUTH_PIN, GPIO.OUT, initial=GPIO.LOW)
