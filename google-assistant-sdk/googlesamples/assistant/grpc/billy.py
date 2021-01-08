@@ -419,6 +419,8 @@ def main(api_endpoint, credentials, project_id,
                 json.dump(payload, f)
 
     device_handler = device_helpers.DeviceRequestHandler(device_id)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(12,GPIO.OUT,initial=GPIO.HIGH)
 
     @device_handler.command('action.devices.commands.OnOff')
     def onoff(on):
