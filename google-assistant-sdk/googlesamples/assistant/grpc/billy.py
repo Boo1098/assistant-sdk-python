@@ -31,7 +31,7 @@ import google.auth.transport.requests
 import google.oauth2.credentials
 
 import RPi.GPIO as GPIO
-import PorcupineDemo
+from porcupine import PorcupineDemo
 
 from google.assistant.embedded.v1alpha2 import (
     embedded_assistant_pb2,
