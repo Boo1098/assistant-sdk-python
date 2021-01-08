@@ -462,8 +462,8 @@ def main(api_endpoint, credentials, project_id,
         wait_for_user_trigger = not once
 
         PorcupineDemo(
-            library_path=apvporcupine.LIBRARY_PATH,
-            model_path=apvporcupine.MODEL_PATH,
+            library_path=pvporcupine.LIBRARY_PATH,
+            model_path=pvporcupine.MODEL_PATH,
             keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['ok google']],
             sensitivities=[0.5],
             output_path=None,
