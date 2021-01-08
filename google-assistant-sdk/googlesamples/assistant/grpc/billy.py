@@ -464,7 +464,7 @@ def main(api_endpoint, credentials, project_id,
         PorcupineDemo(
             library_path=apvporcupine.LIBRARY_PATH,
             model_path=apvporcupine.MODEL_PATH,
-            keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['ok google']]
+            keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['ok google']],
             sensitivities=[0.5],
             output_path=None,
             input_device_index=None).run()
