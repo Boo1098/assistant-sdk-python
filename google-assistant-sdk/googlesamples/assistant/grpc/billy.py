@@ -96,6 +96,8 @@ class SampleAssistant(object):
         # Force reset of first conversation.
         self.is_new_conversation = True
 
+        self.bill=Billy()
+
         # Create Google Assistant API gRPC client.
         self.assistant = embedded_assistant_pb2_grpc.EmbeddedAssistantStub(
             channel
@@ -131,6 +133,9 @@ class SampleAssistant(object):
 
         self.conversation_stream.start_recording()
         logging.info('Recording audio request.')
+        
+        # Turn on recording head
+        self.bill.open_head()
 
         def iter_log_assist_requests():
             for c in self.gen_assist_requests():
@@ -147,6 +152,9 @@ class SampleAssistant(object):
                 logging.info('End of audio request detected.')
                 logging.info('Stopping recording.')
                 self.conversation_stream.stop_recording()
+                
+                # Turn off recording head
+                self.bill.close_head()
             if resp.speech_results:
                 logging.info('Transcript of user request: "%s".',
                              ' '.join(r.transcript
@@ -156,7 +164,13 @@ class SampleAssistant(object):
                     self.conversation_stream.stop_recording()
                     self.conversation_stream.start_playback()
                     logging.info('Playing assistant response.')
+                #mouth_thread = threading.Thread(target=self.bill.mouth)
+                #mouth_thread.start()
+                self.bill.open_mouth()
                 self.conversation_stream.write(resp.audio_out.audio_data)
+                self.bill.close_mouth()
+                #self.bill.stop_mouth=True
+                #mouth_thread.join()
             if resp.dialog_state_out.conversation_state:
                 conversation_state = resp.dialog_state_out.conversation_state
                 logging.debug('Updating conversation state.')
@@ -463,8 +477,8 @@ def main(api_endpoint, credentials, project_id,
         porcupine = PorcupineDemo(
             library_path=pvporcupine.LIBRARY_PATH,
             model_path=pvporcupine.MODEL_PATH,
-            keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['porcupine']],
-            sensitivities=[0.85],
+            keyword_paths=[pvporcupine.KEYWORD_PATHS[x] for x in ['terminator']],
+            sensitivities=[0.95],
             output_path=None,
             input_device_index=None)
 
@@ -478,8 +492,7 @@ def main(api_endpoint, credentials, project_id,
                 while not porcupine.detected:
                     time.sleep(0.1)
                 #click.pause(info='Press Enter to send a new request...')
-            bill.eye_on()
-            bill.open_head()
+            assistant.bill.eye_on()
             continue_conversation = assistant.assist()
             # wait for user trigger if there is no follow-up turn in
             # the conversation.
@@ -488,8 +501,7 @@ def main(api_endpoint, credentials, project_id,
             # If we only want one conversation, break.
             if once and (not continue_conversation):
                 break
-            bill.eye_off()
-            bill.close_head()
+            assistant.bill.eye_off()
 MOUTH_PIN = 22
 HEAD_PIN = 25
 TAIL_PIN = 27
@@ -506,6 +518,7 @@ class Billy:
         GPIO.setup(TAIL_PIN, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(EYE_PIN, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(SPEAKER_SD, GPIO.OUT, initial=GPIO.LOW)
+        self.mouth_stop=False
 
     def open_mouth(self):
         GPIO.output(MOUTH_PIN,GPIO.HIGH)
@@ -530,6 +543,17 @@ class Billy:
 
     def eye_off(self):
         GPIO.output(EYE_PIN,GPIO.LOW)
+
+    def mouth(self):
+        while True:
+            self.open_mouth()
+            print("open")
+            time.sleep(.5)
+            self.close_mouth()
+            print("close")
+            time.sleep(.5)
+            if self.mouth_stop:
+                break
 
 if __name__ == '__main__':
     main()
